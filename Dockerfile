@@ -1,24 +1,24 @@
-# Use official Node.js image
-FROM node:18-alpine
+# Use a stable Node.js version
+FROM node:20-alpine
 
-# Set environment to production
-ENV NODE_ENV=production
-
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --only=production
+# Copy package.json and package-lock.json first (for better caching)
+COPY package*.json ./
 
-# Copy the source code
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the app (including markdown-service folder)
 COPY . .
 
-# Build the Vite app
-RUN npm run build
+# Set environment variables for Vite
+ENV HOST=0.0.0.0
+ENV PORT=5173
 
-# Expose port 5173 (default Vite preview port)
+# Expose the Vite development server port
 EXPOSE 5173
 
-# Serve the built files using npx
-CMD ["npx", "serve", "-s", "dist", "-l", "5173"]
+# Start Vite and allow external access
+CMD ["npm", "run", "dev", "--", "--host"]
