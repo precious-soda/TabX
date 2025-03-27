@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Service 1",
+    "url": "http://localhost:3000"
+  },
+  {
+    "name": "Service 2",
+    "url": "http://localhost:3001"
+  }
+]

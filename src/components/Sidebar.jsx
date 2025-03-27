@@ -2,14 +2,20 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ services, setServices }) => {
-  const [newService, setNewService] = useState("");
+  const [newServiceName, setNewServiceName] = useState("");
+  const [newServiceUrl, setNewServiceUrl] = useState("");
   const [showInput, setShowInput] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAddService = () => {
-    if (newService.trim() !== "") {
-      setServices([...services, newService]);
-      setNewService("");
+    if (newServiceName.trim() !== "" && newServiceUrl.trim() !== "") {
+      const url = newServiceUrl.startsWith("http://")
+        ? newServiceUrl
+        : `http://localhost:${newServiceUrl}`;
+      const newServiceObj = { name: newServiceName, url };
+      setServices([...services, newServiceObj]);
+      setNewServiceName("");
+      setNewServiceUrl("");
       setShowInput(false);
       setIsOpen(false);
     }
@@ -17,7 +23,6 @@ const Sidebar = ({ services, setServices }) => {
 
   return (
     <>
-      {/* Hamburger/Close Button */}
       <button
         className={`
           md:hidden fixed top-4 z-30 p-2 bg-gray-800 text-white rounded-full shadow-lg 
@@ -28,12 +33,7 @@ const Sidebar = ({ services, setServices }) => {
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle menu"
       >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {isOpen ? (
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           ) : (
@@ -41,8 +41,6 @@ const Sidebar = ({ services, setServices }) => {
           )}
         </svg>
       </button>
-
-      {/* Sidebar */}
       <div className={`
         fixed inset-y-0 left-0 w-64 bg-gray-800 text-white flex flex-col shadow-lg transform
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -54,34 +52,38 @@ const Sidebar = ({ services, setServices }) => {
           </Link>
           <button onClick={() => setShowInput(true)} className="text-green-400 text-xl">+</button>
         </div>
-
         <div className="p-4 flex justify-center font-semibold text-gray-400 uppercase text-xs tracking-wider">
           Services
         </div>
-
         <nav className="flex-1 overflow-y-auto">
           <ul className="space-y-1 px-2">
             {services.map((service, index) => (
               <li key={index}>
                 <Link
-                  to={`/services/${encodeURIComponent(service)}`}
+                  to={`/services/${encodeURIComponent(service.name)}`}
                   className="flex items-center px-4 py-3 rounded-md transition-colors duration-150 hover:bg-gray-700 text-gray-300"
                   onClick={() => setIsOpen(false)}
                 >
-                  <span>{service}</span>
+                  <span>{service.name}</span>
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-
         {showInput && (
-          <div className="p-4 border-t border-gray-700 bg-gray-900 flex flex-col">
+          <div className="p-4 border-t border-gray-700 bg-gray-900 flex flex-col space-y-2">
             <input
               type="text"
-              placeholder="Enter service name"
-              value={newService}
-              onChange={(e) => setNewService(e.target.value)}
+              placeholder="Service name"
+              value={newServiceName}
+              onChange={(e) => setNewServiceName(e.target.value)}
+              className="p-2 rounded bg-gray-700 text-white focus:outline-none w-full"
+            />
+            <input
+              type="text"
+              placeholder="Port (e.g., 3000) or full URL"
+              value={newServiceUrl}
+              onChange={(e) => setNewServiceUrl(e.target.value)}
               className="p-2 rounded bg-gray-700 text-white focus:outline-none w-full"
             />
             <div className="flex justify-end mt-2 space-x-2">
@@ -91,8 +93,6 @@ const Sidebar = ({ services, setServices }) => {
           </div>
         )}
       </div>
-
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-10"

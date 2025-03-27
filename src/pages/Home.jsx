@@ -5,13 +5,10 @@ const Home = ({ services }) => {
 
   const checkServiceStatus = async (service) => {
     try {
-      const response = await fetch("http://localhost:8081/markdown", {
-        method: "HEAD",
-        mode: "no-cors",
-      });
-      return { service, status: "Online", error: null };
+      const response = await fetch(service.url, { method: "HEAD" });
+      return { name: service.name, status: "Online", error: null };
     } catch (error) {
-      return { service, status: "Offline", error: error.message };
+      return { name: service.name, status: "Offline", error: error.message };
     }
   };
 
@@ -20,11 +17,10 @@ const Home = ({ services }) => {
       const statuses = {};
       for (const service of services) {
         const result = await checkServiceStatus(service);
-        statuses[service] = result;
+        statuses[service.name] = result;
       }
       setServiceStatuses(statuses);
     };
-
     fetchStatuses();
   }, [services]);
 
@@ -35,31 +31,29 @@ const Home = ({ services }) => {
           Welcome to the Dashboard
         </h1>
       </div>
-
-      {/* Service Status Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
         {services.map((service) => (
           <div
-            key={service}
+            key={service.name}
             className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col items-center w-full max-w-xs"
           >
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              {service}
+              {service.name}
             </h2>
             <div
-              className={`w-3 h-3 rounded-full mb-2 ${serviceStatuses[service]?.status === "Online"
-                ? "bg-green-500"
-                : serviceStatuses[service]?.status === "Offline"
-                  ? "bg-red-500"
-                  : "bg-gray-400"
+              className={`w-3 h-3 rounded-full mb-2 ${serviceStatuses[service.name]?.status === "Online"
+                  ? "bg-green-500"
+                  : serviceStatuses[service.name]?.status === "Offline"
+                    ? "bg-red-500"
+                    : "bg-gray-400"
                 }`}
             />
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Status: {serviceStatuses[service]?.status || "Checking..."}
+              Status: {serviceStatuses[service.name]?.status || "Checking..."}
             </p>
-            {serviceStatuses[service]?.error && (
+            {serviceStatuses[service.name]?.error && (
               <p className="text-xs text-red-500 mt-1">
-                Error: {serviceStatuses[service].error}
+                Error: {serviceStatuses[service.name].error}
               </p>
             )}
           </div>

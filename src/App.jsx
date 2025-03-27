@@ -2,12 +2,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Service from "./pages/Service";
 import Home from "./pages/Home";
-import MarkdownEditor from "../markdown-service/MarkdownEditor";
 import { useState, useEffect } from "react";
+import servicesConfig from "../services.json";
 
 const App = () => {
   const [services, setServices] = useState(() => {
-    return JSON.parse(localStorage.getItem("services")) || ["Service 1", "Service 2"];
+    const stored = JSON.parse(localStorage.getItem("services"));
+    if (stored && stored.every(s => s.name && s.url && s.url.startsWith("http://localhost"))) {
+      return stored;
+    }
+    localStorage.removeItem("services");
+    return servicesConfig;
   });
 
   useEffect(() => {
@@ -17,16 +22,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Routes with Sidebar */}
-        <Route
-          element={<MainLayout services={services} setServices={setServices} />}
-        >
+        <Route element={<MainLayout services={services} setServices={setServices} />}>
           <Route path="/" element={<Home services={services} />} />
-          <Route path="/services/:serviceName" element={<Service />} />
+          <Route path="/services/:serviceName" element={<Service services={services} />} />
         </Route>
-
-        {/* Standalone Route for MarkdownEditor */}
-        <Route path="/markdown" element={<MarkdownEditor />} />
       </Routes>
     </Router>
   );
