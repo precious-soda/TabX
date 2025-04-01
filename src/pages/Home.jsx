@@ -31,34 +31,40 @@ const Home = ({ services }) => {
           Welcome to the Dashboard
         </h1>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-        {services.map((service) => (
-          <div
-            key={service.name}
-            className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col items-center w-full max-w-xs"
-          >
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              {service.name}
-            </h2>
+      {services.length === 0 ? (
+        <p className="text-gray-600 dark:text-gray-300 text-center">
+          No services added yet. Click the + button in the sidebar to add a service.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+          {services.map((service) => (
             <div
-              className={`w-3 h-3 rounded-full mb-2 ${serviceStatuses[service.name]?.status === "Online"
-                  ? "bg-green-500"
-                  : serviceStatuses[service.name]?.status === "Offline"
-                    ? "bg-red-500"
-                    : "bg-gray-400"
-                }`}
-            />
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              Status: {serviceStatuses[service.name]?.status || "Checking..."}
-            </p>
-            {serviceStatuses[service.name]?.error && (
-              <p className="text-xs text-red-500 mt-1">
-                Error: {serviceStatuses[service.name].error}
+              key={service.name}
+              className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col items-center w-full max-w-xs"
+            >
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {service.name}
+              </h2>
+              <div
+                className={`w-3 h-3 rounded-full mb-2 ${serviceStatuses[service.name]?.status === "Online"
+                    ? "bg-green-500"
+                    : serviceStatuses[service.name]?.status === "Offline"
+                      ? "bg-red-500"
+                      : "bg-gray-400"
+                  }`}
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                Status: {serviceStatuses[service.name]?.status || "Checking..."}
               </p>
-            )}
-          </div>
-        ))}
-      </div>
+              {serviceStatuses[service.name]?.error && (
+                <p className="text-xs text-red-500 mt-1">
+                  Error: {serviceStatuses[service.name].error}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

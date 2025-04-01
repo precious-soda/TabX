@@ -9,7 +9,7 @@ const Sidebar = ({ services, setServices }) => {
 
   const handleAddService = () => {
     if (newServiceName.trim() !== "" && newServiceUrl.trim() !== "") {
-      const url = newServiceUrl.startsWith("http://")
+      const url = newServiceUrl.startsWith("http://") || newServiceUrl.startsWith("https://")
         ? newServiceUrl
         : `http://localhost:${newServiceUrl}`;
       const newServiceObj = { name: newServiceName, url };
@@ -41,16 +41,18 @@ const Sidebar = ({ services, setServices }) => {
           )}
         </svg>
       </button>
-      <div className={`
-        fixed inset-y-0 left-0 w-64 bg-gray-800 text-white flex flex-col shadow-lg transform
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
-        md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-20
-      `}>
+      <div
+        className={`
+          fixed inset-y-0 left-0 w-64 bg-gray-800 text-white flex flex-col shadow-lg transform
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+          md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-20
+        `}
+      >
         <div className="bg-gray-900 p-4 border-b border-gray-700 flex justify-between items-center">
           <Link to="/" className="text-xl font-bold hover:text-gray-300 transition-colors">
             TabX
           </Link>
-          <button onClick={() => setShowInput(true)} className="text-green-400 text-xl">+</button>
+          <button onClick={() => setShowInput(true)} className="text-green-400 text-xl hover:text-green-400">+</button>
         </div>
         <div className="p-4 flex justify-center font-semibold text-gray-400 uppercase text-xs tracking-wider">
           Services
@@ -59,13 +61,15 @@ const Sidebar = ({ services, setServices }) => {
           <ul className="space-y-1 px-2">
             {services.map((service, index) => (
               <li key={index}>
-                <Link
-                  to={`/services/${encodeURIComponent(service.name)}`}
+                <a
+                  href={service.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center px-4 py-3 rounded-md transition-colors duration-150 hover:bg-gray-700 text-gray-300"
                   onClick={() => setIsOpen(false)}
                 >
                   <span>{service.name}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>

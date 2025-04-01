@@ -8,13 +8,8 @@ services:
       - .:/app
       - /app/node_modules
     container_name: frontend
-  service1:
-    build: ./service1
+  nginx:
+    build: ./nginx
     ports:
-      - "3000:3000"
-    container_name: service1
-  service2:
-    build: ./service2
-    ports:
-      - "3001:3000"
-    container_name: service2
+      - "8080:80"
+    container_name: example-nginx
