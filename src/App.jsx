@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Home from "./pages/Home";
+import ServiceContainer from "./pages/ServiceContainer"; // Updated import
 import { useState, useEffect } from "react";
 
 const App = () => {
   const [services, setServices] = useState(() => {
     const stored = JSON.parse(localStorage.getItem("services"));
-    return stored || []; // Start empty if no stored services
+    return stored || [];
   });
 
   useEffect(() => {
@@ -15,11 +16,15 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route element={<MainLayout services={services} setServices={setServices} />}>
+      <MainLayout services={services} setServices={setServices}>
+        <Routes>
           <Route path="/" element={<Home services={services} />} />
-        </Route>
-      </Routes>
+          <Route
+            path="/service/:serviceName"
+            element={<ServiceContainer services={services} />}
+          />
+        </Routes>
+      </MainLayout>
     </Router>
   );
 };
