@@ -12,25 +12,27 @@ const ServiceContainer = ({ services }) => {
   }, [serviceName, mountedServices]);
 
   return (
-    <div className="p-6 w-full h-full">
+    <div className="w-full h-full flex flex-col">
       {services.map((service) => (
         <div
           key={service.name}
           style={{
-            display: service.name === serviceName ? "block" : "none",
+            display: service.name === serviceName ? "flex" : "none",
+            flexDirection: "column",
             height: "100%",
+            width: "100%"
           }}
+          className="flex-1"
         >
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            {service.name}
-          </h2>
           {mountedServices[service.name] && (
-            <iframe
-              src={service.url}
-              title={service.name}
-              className="w-full h-[calc(100vh-8rem)] border-0"
-              sandbox="allow-scripts allow-same-origin allow-forms"
-            />
+            <div className="flex-1 w-full h-full">
+              <iframe
+                src={service.url}
+                title={service.name}
+                className="w-full h-full border-0"
+                sandbox="allow-scripts allow-same-origin allow-forms"
+              />
+            </div>
           )}
         </div>
       ))}
