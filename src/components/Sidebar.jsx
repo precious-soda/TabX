@@ -14,10 +14,8 @@ const Sidebar = ({ services, setServices }) => {
 
   const handleAddService = () => {
     if (newServiceName.trim() !== "" && newServiceUrl.trim() !== "") {
-      const url = newServiceUrl.startsWith("http://") || newServiceUrl.startsWith("https://")
-        ? newServiceUrl
-        : `http://localhost:${newServiceUrl}`;
-      const newServiceObj = { name: newServiceName, url };
+      // No automatic localhost prefixing; use the full URL as provided
+      const newServiceObj = { name: newServiceName, url: newServiceUrl };
       setServices([...services, newServiceObj]);
       setNewServiceName("");
       setNewServiceUrl("");
@@ -268,7 +266,7 @@ const Sidebar = ({ services, setServices }) => {
             />
             <input
               type="text"
-              placeholder="Port (e.g., 3000) or full URL"
+              placeholder="Full URL (e.g., https://example.com)"
               value={newServiceUrl}
               onChange={(e) => setNewServiceUrl(e.target.value)}
               className="p-2 rounded bg-gray-700 text-white focus:outline-none w-full"
