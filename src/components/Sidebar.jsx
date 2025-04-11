@@ -14,7 +14,6 @@ const Sidebar = ({ services, setServices }) => {
 
   const handleAddService = () => {
     if (newServiceName.trim() !== "" && newServiceUrl.trim() !== "") {
-      // No automatic localhost prefixing; use the full URL as provided
       const newServiceObj = { name: newServiceName, url: newServiceUrl };
       setServices([...services, newServiceObj]);
       setNewServiceName("");
@@ -77,7 +76,6 @@ const Sidebar = ({ services, setServices }) => {
         aria-label="Toggle menu"
         data-testid="close-sidebar-button"
       >
-        {/* Desktop version (hidden on mobile) */}
         <svg
           width="24"
           height="24"
