@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 Sahil Kumar Jamwal.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useState, useEffect } from "react";
 
 const Home = ({ services }) => {
@@ -33,7 +49,7 @@ const Home = ({ services }) => {
       </div>
       {services.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300 text-center">
-          No services added yet. Click the + button in the sidebar to add a service.
+          No services added yet. Click the button in the sidebar to add a service.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
@@ -45,22 +61,6 @@ const Home = ({ services }) => {
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 {service.name}
               </h2>
-              <div
-                className={`w-3 h-3 rounded-full mb-2 ${serviceStatuses[service.name]?.status === "Online"
-                    ? "bg-green-500"
-                    : serviceStatuses[service.name]?.status === "Offline"
-                      ? "bg-red-500"
-                      : "bg-gray-400"
-                  }`}
-              />
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Status: {serviceStatuses[service.name]?.status || "Checking..."}
-              </p>
-              {serviceStatuses[service.name]?.error && (
-                <p className="text-xs text-red-500 mt-1">
-                  Error: {serviceStatuses[service.name].error}
-                </p>
-              )}
             </div>
           ))}
         </div>

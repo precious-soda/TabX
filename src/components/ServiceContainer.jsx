@@ -1,6 +1,21 @@
+/*
+ * Copyright 2025 Sahil Kumar Jamwal.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import proxyHints from "./config/proxyServices.json"; // keep this!
 
 const ServiceContainer = ({ services }) => {
   const { serviceName } = useParams();
@@ -23,13 +38,6 @@ const ServiceContainer = ({ services }) => {
       }, 300);
     }
   }, [serviceName, mountedServices, visibleService]);
-
-  const getIframeSrc = (url) => {
-    const needsProxy = proxyHints.some((hint) => url.includes(hint));
-    return needsProxy
-      ? `http://localhost:4000?url=${encodeURIComponent(url)}`
-      : url;
-  };
 
   const handleIframeError = (name) => {
     setFrameErrors((prev) => ({ ...prev, [name]: true }));
@@ -75,7 +83,7 @@ const ServiceContainer = ({ services }) => {
                       </div>
                     )}
                     <iframe
-                      src={getIframeSrc(service.url)}
+                      src={service.url}
                       title={service.name}
                       className={`w-full h-full border-0 transition-opacity duration-500 ${iframeLoaded[service.name] ? "opacity-100" : "opacity-0"
                         }`}
