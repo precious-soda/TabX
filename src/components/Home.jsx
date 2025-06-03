@@ -49,7 +49,7 @@ const Home = ({ services }) => {
       </div>
       {services.length === 0 ? (
         <p className="text-gray-600 dark:text-gray-300 text-center">
-          No services added yet. Click the button in the sidebar to add a service.
+          Click the button in the sidebar to add a service.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
