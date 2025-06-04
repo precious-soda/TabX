@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "./MainLayout";
 import Home from "./components/Home";
 import ServiceContainer from "./components/ServiceContainer";
+import Login from "./components/Login";
 import { useState, useEffect } from "react";
 
 const App = () => {
@@ -25,6 +26,23 @@ const App = () => {
     const stored = JSON.parse(localStorage.getItem("services"));
     return stored || [];
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
+
+  // Initialize default user from .env
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          username: process.env.REACT_APP_DEFAULT_USERNAME,
+          password: process.env.REACT_APP_DEFAULT_PASSWORD,
+        })
+      );
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("services", JSON.stringify(services));
@@ -32,15 +50,40 @@ const App = () => {
 
   return (
     <Router>
-      <MainLayout services={services} setServices={setServices}>
-        <Routes>
-          <Route path="/" element={<Home services={services} />} />
-          <Route
-            path="/service/:serviceName"
-            element={<ServiceContainer services={services} />}
-          />
-        </Routes>
-      </MainLayout>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/" />
+            ) : (
+              <Login setIsAuthenticated={setIsAuthenticated} />
+            )
+          }
+        />
+        <Route
+          path="/*"
+          element={
+            isAuthenticated ? (
+              <MainLayout
+                services={services}
+                setServices={setServices}
+                setIsAuthenticated={setIsAuthenticated} // Pass setIsAuthenticated
+              >
+                <Routes>
+                  <Route path="/" element={<Home services={services} />} />
+                  <Route
+                    path="/service/:serviceName"
+                    element={<ServiceContainer services={services} />}
+                  />
+                </Routes>
+              </MainLayout>
+            ) : (
+              <Navigate to="/login" replace /> // Add replace for consistency
+            )
+          }
+        />
+      </Routes>
     </Router>
   );
 };
