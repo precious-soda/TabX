@@ -30,15 +30,17 @@ const App = () => {
     localStorage.getItem("isAuthenticated") === "true"
   );
 
-  // Initialize default user from .env
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const envUsername = import.meta.env.VITE_DEFAULT_USERNAME;
+    const envPassword = import.meta.env.VITE_DEFAULT_PASSWORD;
+
+    if (!storedUser || storedUser.password !== envPassword) {
       localStorage.setItem(
         "user",
         JSON.stringify({
-          username: process.env.REACT_APP_DEFAULT_USERNAME,
-          password: process.env.REACT_APP_DEFAULT_PASSWORD,
+          username: envUsername,
+          password: envPassword,
         })
       );
     }
@@ -68,7 +70,7 @@ const App = () => {
               <MainLayout
                 services={services}
                 setServices={setServices}
-                setIsAuthenticated={setIsAuthenticated} // Pass setIsAuthenticated
+                setIsAuthenticated={setIsAuthenticated}
               >
                 <Routes>
                   <Route path="/" element={<Home services={services} />} />
@@ -79,7 +81,7 @@ const App = () => {
                 </Routes>
               </MainLayout>
             ) : (
-              <Navigate to="/login" replace /> // Add replace for consistency
+              <Navigate to="/login" replace />
             )
           }
         />
