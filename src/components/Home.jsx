@@ -1,30 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Home = ({ services }) => {
-  const [serviceStatuses, setServiceStatuses] = useState({});
-
-  const checkServiceStatus = async (service) => {
-    try {
-      const response = await fetch(service.url, { method: "HEAD" });
-      return { name: service.name, status: "Online", error: null };
-    } catch (error) {
-      return { name: service.name, status: "Offline", error: error.message };
-    }
-  };
-
-  useEffect(() => {
-    const fetchStatuses = async () => {
-      const statuses = {};
-      for (const service of services) {
-        const result = await checkServiceStatus(service);
-        statuses[service.name] = result;
-      }
-      setServiceStatuses(statuses);
-    };
-    fetchStatuses();
-  }, [services]);
-
   return (
     <div className="p-6">
       <div className="flex flex-col items-center mb-8">
@@ -47,14 +23,6 @@ const Home = ({ services }) => {
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 {service.name}
               </h2>
-              <p
-                className={`text-sm ${serviceStatuses[service.name]?.status === "Online"
-                    ? "text-green-500"
-                    : "text-red-500"
-                  }`}
-              >
-                {serviceStatuses[service.name]?.status || "Checking..."}
-              </p>
             </Link>
           ))}
         </div>
