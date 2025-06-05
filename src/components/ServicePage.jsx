@@ -18,7 +18,8 @@ import { useParams } from "react-router-dom";
 
 const ServicePage = ({ services }) => {
   const { serviceName } = useParams();
-  const service = services.find((s) => s.name === serviceName);
+  const decodedServiceName = decodeURIComponent(serviceName); // Decode service name
+  const service = services.find((s) => s.name === decodedServiceName);
 
   if (!service) {
     return (

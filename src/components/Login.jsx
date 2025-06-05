@@ -42,12 +42,10 @@ const Login = ({ setIsAuthenticated }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="flex flex-col items-center">
-        {/* Large White Icon Above Login Card */}
         <img
-          src="/x-logo.svg"
+          src="/x-login-logo.svg"
           alt="App Logo"
-          className="w-20 h-20 mb-6" // Removed dark:invert
-          style={{ filter: "brightness(0) invert(1)" }} // Force white color
+          className="w-20 h-20 mb-6"
         />
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">

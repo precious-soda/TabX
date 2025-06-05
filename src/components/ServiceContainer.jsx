@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 
 const ServiceContainer = ({ services }) => {
   const { serviceName } = useParams();
+  const decodedServiceName = decodeURIComponent(serviceName); // Decode service name
   const [mountedServices, setMountedServices] = useState({});
   const [frameErrors, setFrameErrors] = useState({});
   const [iframeLoaded, setIframeLoaded] = useState({});
@@ -26,18 +27,18 @@ const ServiceContainer = ({ services }) => {
   const [fadingOut, setFadingOut] = useState(false);
 
   useEffect(() => {
-    if (serviceName && !mountedServices[serviceName]) {
-      setMountedServices((prev) => ({ ...prev, [serviceName]: true }));
+    if (decodedServiceName && !mountedServices[decodedServiceName]) {
+      setMountedServices((prev) => ({ ...prev, [decodedServiceName]: true }));
     }
 
-    if (serviceName !== visibleService) {
+    if (decodedServiceName !== visibleService) {
       setFadingOut(true);
       setTimeout(() => {
-        setVisibleService(serviceName);
+        setVisibleService(decodedServiceName);
         setFadingOut(false);
       }, 300);
     }
-  }, [serviceName, mountedServices, visibleService]);
+  }, [decodedServiceName, mountedServices, visibleService]);
 
   const handleIframeError = (name) => {
     setFrameErrors((prev) => ({ ...prev, [name]: true }));
@@ -99,7 +100,7 @@ const ServiceContainer = ({ services }) => {
         );
       })}
 
-      {!services.find((s) => s.name === serviceName) && (
+      {!services.find((s) => s.name === decodedServiceName) && (
         <div className="p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             Service Not Found
