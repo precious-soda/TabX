@@ -20,16 +20,29 @@ import Home from "./components/Home";
 import ServiceContainer from "./components/ServiceContainer";
 import Login from "./components/Login";
 import { useState, useEffect } from "react";
+import defaultServices from "./config/services.json";
 
 const App = () => {
   const [services, setServices] = useState(() => {
-    const stored = JSON.parse(localStorage.getItem("services"));
-    return stored || [];
+    const stored = JSON.parse(localStorage.getItem("services")) || [];
+    // Merge default services with stored, avoiding duplicates
+    return [
+      ...defaultServices.filter(
+        (defaultService) => !stored.some((s) => s.name === defaultService.name)
+      ),
+      ...stored,
+    ];
   });
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
 
+  // Persist services to localStorage on update
+  useEffect(() => {
+    localStorage.setItem("services", JSON.stringify(services));
+  }, [services]);
+
+  // Handle user authentication setup
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const envUsername = import.meta.env.VITE_DEFAULT_USERNAME;
@@ -45,10 +58,6 @@ const App = () => {
       );
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("services", JSON.stringify(services));
-  }, [services]);
 
   return (
     <Router>
