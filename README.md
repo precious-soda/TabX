@@ -6,7 +6,8 @@ TabX brings all your local services together in one dashboard allowing seamless 
 - npm (version 8 or higher)
 
 ## Configuration
-TabX uses a services.json configuration file to define default services displayed in the dashboard. This file is located at src/config/services.json.
+TabX uses a [`services.json`](src/config/services.json) configuration file to define default services displayed in the dashboard. This file is located at `src/config/services.json`.
+
 
 ## Getting Started 🚀
 **Clone the repository**:
@@ -22,7 +23,7 @@ TabX uses a services.json configuration file to define default services displaye
 ```
 
 ## License
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [`LICENSE`](LICENSE) file for details.
 
 
 

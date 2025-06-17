@@ -9,7 +9,7 @@
   },
   {
     "name": "Redpanda",
-    "url": "http://localhost:8087"
+    "url": "http://localhost:8780"
   },
   {
     "name": "Grafana",
