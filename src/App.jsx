@@ -24,15 +24,28 @@ import defaultServices from "./config/services.json";
 
 const App = () => {
   const [services, setServices] = useState(() => {
+    // Get the current hostname
+    const hostname = window.location.hostname;
+
+    // Modify defaultServices URLs based on hostname
+    const modifiedDefaultServices = defaultServices.map((service) => ({
+      ...service,
+      url:
+        hostname === "localhost" || hostname === "127.0.0.1"
+          ? service.url // Keep localhost URLs as-is
+          : service.url.replace("localhost", hostname), // Replace localhost with current hostname
+    }));
+
+    // Merge with stored services from localStorage
     const stored = JSON.parse(localStorage.getItem("services")) || [];
-    // Merge default services with stored, avoiding duplicates
     return [
-      ...defaultServices.filter(
+      ...modifiedDefaultServices.filter(
         (defaultService) => !stored.some((s) => s.name === defaultService.name)
       ),
       ...stored,
     ];
   });
+
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
